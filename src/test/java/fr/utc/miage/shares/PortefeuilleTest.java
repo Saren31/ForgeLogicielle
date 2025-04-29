@@ -15,8 +15,48 @@
  */
 package fr.utc.miage.shares;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 public class PortefeuilleTest {
+    
+    private static final String VALEUR_NOM1 = "Valeur nom 1";
+    private static final String VALEUR_NOM2 = "Valeur nom 2";
+
+    @Test
+    void testConstructorWithCorrectParameterSucces(){
+        assertDoesNotThrow(
+            () -> new Portefeuille(VALEUR_NOM1));
+    }
+
+    @Test
+    void testConstructorWithIncorrectParametersIllegaleArgumentException(){
+            assertAll("Constructor parameter",
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> new Portefeuille(null)),
+                    
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> new Portefeuille(""))
+            
+            );
+                
+    }
+
+
+    @Test
+     void testGetNomReturnsConstructeurParameter(){
+
+        final Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
+        final String result = portefeuille.getNom();
+
+        assertEquals(VALEUR_NOM1,result,
+         "Le nom du portefeuille doit correspondre a celui passé en parametre");
+        
+     }
+    
+
         
 }

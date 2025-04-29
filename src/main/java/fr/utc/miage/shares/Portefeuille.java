@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * This class represents the behavior of a Portefeuille
  *
- * @author Lucas Veslin
+ * @author Lucas Veslin, ANIFRANI Wenfried
  */
 public class Portefeuille {
     
@@ -40,36 +40,68 @@ public class Portefeuille {
      * @param libelle the name of the action object
      */
     public Portefeuille(final String n) {
+        if (n == null || n.isEmpty()) {
+            throw new IllegalArgumentException("Le nom ne doit pas etre vide ou null");
+        }
+
         this.nom = n;
         this.actions = new LinkedList<>();
         this.solde = 0.0;
     }
 
-    public void ajouterAction(Action action) {
+
+    /**
+     * Ajouter une action a la liste
+     * @param action action qui va etre ajoutee 
+     */
+    public void ajouterAction( final Action action) {
         this.actions.add(action);
     }
 
-    public void retirerAction(Action action) {
+    /**
+     * Retirer une action a la liste
+     * @param action action qui va etre retiree
+     */
+    public void retirerAction(final Action action) {
         this.actions.remove(action);
     }
 
+    /**
+     * getteur de la valeur du nom
+     * @return la valeur du nom 
+     */
     public String getNom() {
         return nom;
     }
 
+    /**
+     * getteur de la valeur du solde
+     * @return la valeur du nom
+     */
     public double getSolde() {
         return solde;
     }
 
+    /**
+     * setteur de la valeur du solde
+     * @param solde de la valeur du solde
+     */
     public void setSolde(double solde) {
         this.solde = solde;
     }
 
+    /**
+     * getteur de la valeur de la liste d'actions
+     * @return la valeur de la liste d'actions
+     */
     public List<Action> getActions() {
         return actions;
     }
 
-
+    /**
+     * Calcule la valeur totale du portefeuille
+     * @return la valeur toltale du portefeuille
+     */
     public double valeurTotale() {
         return 0.0; 
     }
