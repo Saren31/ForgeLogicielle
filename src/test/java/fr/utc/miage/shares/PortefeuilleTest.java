@@ -19,6 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 public class PortefeuilleTest {
@@ -47,15 +51,25 @@ public class PortefeuilleTest {
 
 
     @Test
-     void testGetNomReturnsConstructeurParameter(){
+     void testAllGettersShouldWork(){
 
         final Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
-        final String result = portefeuille.getNom();
-
-        assertEquals(VALEUR_NOM1,result,
-         "Le nom du portefeuille doit correspondre a celui passé en parametre");
         
-     }
+        final String resultNom = portefeuille.getNom();
+        final double resultSolde = portefeuille.getSolde();
+        final List<Action> resultActions = portefeuille.getActions();
+
+        assertAll("Getters",
+            () -> assertEquals(VALEUR_NOM1, resultNom,
+                "Le nom du portefeuille doit correspondre a celui passé en parametre"),
+            () -> assertEquals(0.0, resultSolde,
+                "Le solde du portefeuille doit etre initialise a 0.0"),
+            () -> assertEquals(new LinkedList<>(), resultActions,
+                "La liste d'actions du portefeuille doit etre vide")
+        );
+    }
+
+
     
 
         

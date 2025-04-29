@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * This class represents the behavior of a Portefeuille
  *
- * @author Lucas Veslin, ANIFRANI Wenfried
+ * @author Lucas Veslin, Wenfried ANIFRANI
  */
 public class Portefeuille {
     
