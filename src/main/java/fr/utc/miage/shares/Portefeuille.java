@@ -52,4 +52,15 @@ public class Portefeuille {
         return sb.toString();
     }
 
+    public int equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Portefeuille that = (Portefeuille) o;
+        return Double.compare(that.solde, solde) == 0 && Objects.equals(actions, that.actions);
+    }
+
+    public int hashCode() {
+        return Objects.hash(actions, solde);
+    }
+
 }
