@@ -1,15 +1,47 @@
+/*
+ * Copyright 2025 David Navarre &lt;David.Navarre at irit.fr&gt;.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package fr.utc.miage.shares;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * This class represents the behavior of a Portefeuille
+ *
+ * @author Lucas Veslin
+ */
 public class Portefeuille {
     
-    private List<Action> actions;
+    // attribut comportant le nom du possesseur du portefeuille
+    private final String nom;
+
+    // attribut comportant la liste des actions
+    private final List<Action> actions;
+
+    // attribut comportant le solde du portefeuille
     private double solde;
 
-    public Portefeuille() {
-        this.actions = new ArrayList<>();
+    /**
+     * Builds a Portefeuille object
+     *
+     * @param libelle the name of the action object
+     */
+    public Portefeuille(final String n) {
+        this.nom = n;
+        this.actions = new LinkedList<>();
         this.solde = 0.0;
     }
 
@@ -19,6 +51,10 @@ public class Portefeuille {
 
     public void retirerAction(Action action) {
         this.actions.remove(action);
+    }
+
+    public String getNom() {
+        return nom;
     }
 
     public double getSolde() {
@@ -33,23 +69,46 @@ public class Portefeuille {
         return actions;
     }
 
-    public void setActions(List<Action> actions) {
-        this.actions = actions;
-    }
 
     public double valeurTotale() {
         return 0.0; 
     }
 
+    @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Portefeuille :\n");
-        sb.append("Solde : ").append(solde).append("\n");
-        sb.append("Actions :\n");
-        for (Action action : actions) {
-            sb.append(action.toString()).append("\n");
-        }
-        return sb.toString();
+        return "Portefeuille [getSolde()=" + getSolde() + ", getClass()=" + getClass() + ", getActions()="
+                + getActions() + "]";
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((actions == null) ? 0 : actions.hashCode());
+        long temp;
+        temp = Double.doubleToLongBits(solde);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Portefeuille other = (Portefeuille) obj;
+        if (actions == null) {
+            if (other.actions != null)
+                return false;
+        } else if (!actions.equals(other.actions))
+            return false;
+        if (Double.doubleToLongBits(solde) != Double.doubleToLongBits(other.solde))
+            return false;
+        return true;
+    }
+
+    
 }
