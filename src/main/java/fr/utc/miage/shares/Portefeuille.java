@@ -1,5 +1,8 @@
 package fr.utc.miage.shares;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Portefeuille {
     
     private List<Action> actions;
