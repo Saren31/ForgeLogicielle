@@ -47,7 +47,7 @@ public class PortefeuilleTest {
 
 
     @Test
-     void testGetNomReturnsConstructeurParameter(){
+     void testAllGettersShouldWork(){
 
         final Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
         final String result = portefeuille.getNom();
