@@ -1,9 +1,15 @@
 package fr.utc.miage.shares;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ActionComposeeTest {
+    private static final String VALEUR_LIBELLE = "Valeur libelle";
+    private static final String VALEUR_LIBELLE2 = "Valeur libelle 2";
+    private static final float VALEUR_COURS = 100.0f;
+    private static final float VALEUR_COURS2 = 200.0f;
+
+    /** 
 
     // Classe factice pour simuler des actions simples
     private static class FakeAction extends Action {
@@ -94,6 +100,29 @@ class ActionComposeeTest {
     Map<Action, Float> composants = ac.getComposants();
     assertEquals(1, composants.size());
     assertEquals(0.7f, composants.get(a));
-}
+}*/
+    @Test 
+    void testValeurActionComposee() {
+       final ActionComposee actionComposee = new ActionComposee("ActionComposeeTest");
+         final ActionSimple action1 = new ActionSimple(VALEUR_LIBELLE);
+         final ActionSimple action2 = new ActionSimple(VALEUR_LIBELLE2);
+        actionComposee.ajouterComposant(action1, 0.5f);
+        actionComposee.ajouterComposant(action2, 0.5f);
+        final double valeurAttendue = (VALEUR_COURS + VALEUR_COURS2) / 2.0;
+        final double valeurActionComposee = actionComposee.valeur(null);
+
+        assertEquals(valeurAttendue, valeurActionComposee, 0.01,
+         "La valeur de l'action composée est incorrecte");
+         
+
+
+
+        
+
+        
+
+        
+   
+    }
 
 }

@@ -17,6 +17,7 @@
 
 package fr.utc.miage.shares;
 
+import java.lang.classfile.instruction.ThrowInstruction;
 import java.util.Map;
 import java.util.Objects;
 import java.util.HashMap;
@@ -41,6 +42,18 @@ public class ActionComposee extends Action {
             throw new IllegalArgumentException("proportion doit être entre 0 et 1");
         }
         composants.put(action, proportion);
+    }
+
+    public double valeurActionComposee(Jour j){
+        double resultat = 0.0;
+        for (Map.Entry<ActionSimple, Float> entry : composants.entrySet()) {
+            ActionSimple action = entry.getKey();
+            float proportion = entry.getValue();
+            resultat += proportion * action.valeur(j);
+    
+        }
+        return  resultat;
+        
     }
 
     @Override
@@ -81,4 +94,14 @@ public class ActionComposee extends Action {
     public int hashCode() {
         return Objects.hash(super.hashCode(), composants);
     }
+
+    
+
+        
+
+    }
+
+
+
+    
 }

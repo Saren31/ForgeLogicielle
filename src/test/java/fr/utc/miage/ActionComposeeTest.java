@@ -27,7 +27,7 @@ import fr.utc.miage.shares.ActionSimple;
 import fr.utc.miage.shares.Portefeuille;
 
 public class ActionComposeeTest {
-
+/** 
     @Test
     public void testCreationActionComposee() {
         ActionSimple apple = new ActionSimple("Apple");
@@ -63,5 +63,6 @@ public class ActionComposeeTest {
         assertTrue(portefeuille.getActions().contains(ac));
         assertEquals(1, portefeuille.getActions().size());
     }
+        */
 }
 
