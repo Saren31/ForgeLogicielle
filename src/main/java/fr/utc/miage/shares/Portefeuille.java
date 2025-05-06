@@ -15,6 +15,7 @@
  */
 package fr.utc.miage.shares;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -30,7 +31,7 @@ public class Portefeuille {
     private final String nom;
 
     // attribut comportant la liste des actions
-    private final List<Action> actions;
+    private List<Action> actions;
 
     // attribut comportant le solde du portefeuille
     private double solde;
@@ -123,27 +124,22 @@ public class Portefeuille {
         result = prime * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Portefeuille other = (Portefeuille) obj;
-        if (actions == null) {
-            if (other.actions != null)
-                return false;
-        } else if (!actions.equals(other.actions))
-            return false;
-        if (Double.doubleToLongBits(solde) != Double.doubleToLongBits(other.solde))
-            return false;
-        return true;
-    }
-    
-    public void acheterAction(ActionSimple action, int quantite, Jour jour) {
+  
+/**
+ * Permet à l'utilisateur d'acheter une ou plusieurs actions simples pour un jour donné
+ * 
+ * Si le prix de l'action est connu pour ce jour et que le solde est suffisant alors
+ * les actions sont ajoutées au portefeuille et le solde est débité du coût total.
+ * 
+ * @param action l'action simple à acheter
+ * @param quantite la quantite d'action à acheter
+ * @param jour le jour auquel on achete l'action et qui determine donc la valeur
+ * 
+ * @throws IllegalArgumentException si action null, si quantite inferieur ou egal a 0,
+ *                                  ou si l'action n'a pas de prix pour ce jour
+ * @throws IllegalStateException    si le solde est insuffisant pour l'achat
+ */    
+public void acheterAction(ActionSimple action, int quantite, Jour jour) {
       if (action == null || quantite <= 0) {
           throw new IllegalArgumentException("Action invalide ou quantité invalide");
       }
@@ -167,5 +163,79 @@ public class Portefeuille {
           this.actions.add(action);
       }
   }
-}  
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Portefeuille other = (Portefeuille) obj;
+        if (actions == null) {
+            if (other.actions != null)
+                return false;
+        } else if (!actions.equals(other.actions))
+            return false;
+        if (Double.doubleToLongBits(solde) != Double.doubleToLongBits(other.solde))
+            return false;
+        return true;
+    }
+
+/**
+ * Permet à l'utilisateur de vendre une ou plusieurs actions simples pour un jour donné.
+ * 
+ * Si le prix de l'action est connu pour ce jour et que le portefeuille contient
+ * suffisamment d'actions correspondantes alors elles sont retirées du portefeuille
+ * et le solde est crédité du montant total de la vente.
+ * 
+ *
+ * @param action l'action simple à vendre
+ * @param quantite la quantite d'action à vendre
+ * @param jour le jour auquel on vend l'action et qui determine donc la valeur
+ *
+ * @throws IllegalArgumentException si action null, si quantite inferieur ou egal    0,
+ *                                  ou si l'action n'a pas de prix pour ce jour
+ * @throws IllegalStateException    si le solde est insuffisant pour la vente
+ * 
+ */
+public void vendreAction(ActionSimple action, int quantite, Jour jour) {
+    if (action == null || quantite <= 0) {
+        throw new IllegalArgumentException("Action invalide ou quantité invalide");
+    }
+
+    float prixAction = action.valeur(jour);
+    if (prixAction == 0) {
+        throw new IllegalArgumentException("L'action n'a pas de prix pour ce jour");
+    }
+
+    //compter le nombre d'occurrences de cette action dans le portefeuille
+    int count = 0;
+    for (Action a : actions) {
+        if (a.equals(action)) {
+            count++;
+        }
+    }
+    if (count < quantite) {
+        throw new IllegalStateException("Pas assez d'actions à vendre dans le portefeuille");
+    }
+
+    //retirer les actions
+    int supprimees = 0;
+    List<Action> nouvellesActions = new ArrayList<>();
+    for (Action a : actions) {
+        if (a.equals(action) && supprimees < quantite) {
+            supprimees++;
+        } else {
+            nouvellesActions.add(a);
+        }
+    }
+    this.actions = nouvellesActions;
+
+    //créditer le solde
+    solde += prixAction * quantite;
+}
+
+}
 
