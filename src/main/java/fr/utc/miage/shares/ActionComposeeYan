@@ -19,11 +19,11 @@ package fr.utc.miage.shares;
 import java.util.Map;
 import java.util.Objects;
 
-public class ActionComposee extends Action {
+public class ActionComposeeYan extends Action {
 
     private final Map<ActionSimple, Float> composition;
 
-    public ActionComposee(String libelle, Map<ActionSimple, Float> composition) {
+    public ActionComposeeYan(String libelle, Map<ActionSimple, Float> composition) {
         super(libelle); 
         this.composition = composition;
     }
@@ -54,9 +54,9 @@ public class ActionComposee extends Action {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ActionComposee)) return false;
+        if (!(o instanceof ActionComposeeYan)) return false;
         if (!super.equals(o)) return false;
-        ActionComposee that = (ActionComposee) o;
+        ActionComposeeYan that = (ActionComposeeYan) o;
         return composition.equals(that.composition);
     }
 

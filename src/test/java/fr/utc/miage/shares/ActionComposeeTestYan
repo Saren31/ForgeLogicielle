@@ -26,7 +26,7 @@ import fr.utc.miage.shares.ActionComposee;
 import fr.utc.miage.shares.ActionSimple;
 import fr.utc.miage.shares.Portefeuille;
 
-public class ActionComposeeTest {
+public class ActionComposeeTestYan {
 
     @Test
     public void testCreationActionComposee() {
@@ -38,7 +38,7 @@ public class ActionComposeeTest {
             google, 0.4f
         );
 
-        ActionComposee ac = new ActionComposee("TechMix", composition);
+        ActionComposeeYan ac = new ActionComposeeYan("TechMix", composition);
 
         assertEquals("TechMix", ac.getLibelle());
         assertEquals(2, ac.getComposition().size());
@@ -55,7 +55,7 @@ public class ActionComposeeTest {
             google, 0.5f
         );
 
-        ActionComposee ac = new ActionComposee("BigTech", composition);
+        ActionComposeeYan ac = new ActionComposeeYan("BigTech", composition);
 
         Portefeuille portefeuille = new Portefeuille();
         portefeuille.ajouterAction(ac);
