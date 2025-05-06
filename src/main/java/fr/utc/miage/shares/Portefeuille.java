@@ -37,7 +37,7 @@ public class Portefeuille {
     /**
      * Builds a Portefeuille object
      *
-     * @param libelle the name of the action object
+     * @param n the name of the action object
      */
     public Portefeuille(final String n) {
         if (n == null || n.isEmpty()) {

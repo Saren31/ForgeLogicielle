@@ -56,6 +56,34 @@ public class PortefeuilleTest {
          "Le nom du portefeuille doit correspondre a celui passé en parametre");
         
      }
+     @Test
+     void testAjouteUneActionDansLePortefeuilleAvecSuccès(){
+
+        final Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
+        final Action action = new ActionSimple(VALEUR_NOM2);
+        portefeuille.ajouterAction(action);
+        final Action actionPortefeuille = portefeuille.getActions().get(0);
+
+        assertEquals(action, actionPortefeuille,
+         "L'action doit etre la meme que celle ajoutee dans le portefeuille");  
+        
+     }
+     @Test
+     void testRetireUneActionDuPortefeuilleAvecSuccès(){
+
+        final Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
+        final Action action = new ActionSimple(VALEUR_NOM2);
+        portefeuille.ajouterAction(action);
+        portefeuille.retirerAction(action);
+        final int nombreActionsRetirees = portefeuille.getActions().size();
+
+        assertEquals(0,nombreActionsRetirees,   
+         "Le portefeuille doit etre vide apres le retrait de l'action");   
+         
+     }
+
+
+
     
 
         
