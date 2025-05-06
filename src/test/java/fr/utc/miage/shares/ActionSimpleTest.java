@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 
-public class ActionSimpleTest {
+class ActionSimpleTest {
 
     private static final String ACTION_NOM = " valeur_nom";
     private static final int ANNEE1 = 2003;
@@ -27,6 +27,7 @@ public class ActionSimpleTest {
     private static final int JOUR1 = 1;
     private static final int JOUR2 = 2;
     private static final float COURS1 = 10.0f;
+    private static final float COURS2 = 50.0f;
     
 
     @Test
@@ -49,6 +50,30 @@ public class ActionSimpleTest {
                 "le cours doit etre le meme que celui enregistre pour ce jour");
 
     }
+
+    @Test
+    void testCoursDejaEnregistrePourUnJourNeChangePas(){
+        final ActionSimple action = new ActionSimple(ACTION_NOM);
+        final Jour jour = new Jour(ANNEE1,JOUR1);
+        action.enrgCours(jour, COURS1);
+        action.enrgCours(jour, COURS2);
+        final float cours = action.valeur(jour);
+        
+        assertEquals(COURS1, cours,
+                "le cours doit etre celui enregistre en premier meme si on a essaye de le changer");
+    }
+
+    @Test
+    void testCoursParDefautPourUnJourNonEnregistre() {
+        final ActionSimple action = new ActionSimple(ACTION_NOM);
+        final Jour jour = new Jour(ANNEE1,JOUR1);
+        final float cours = action.valeur(jour);
+        
+        assertEquals(0.0f, cours,
+                "le cours doit etre 0.0 car il n'y a pas de cours pour ce jour");
+    }
+
+
 
 
 
