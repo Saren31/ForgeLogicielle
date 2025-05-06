@@ -208,4 +208,117 @@ public class PortefeuilleTest {
           portefeuille.acheterAction(null, 1, jour);
       });
     }
+    @Test
+public void testUS7_1_achatActionComposeeReussi() {
+    Portefeuille portefeuille = new Portefeuille("TestUser");
+    portefeuille.setSolde(500.0);
+
+    ActionSimple a1 = new ActionSimple("A1");
+    ActionSimple a2 = new ActionSimple("A2");
+    Jour jour = new Jour(2025, 160);
+
+    a1.enrgCours(jour, 100.0f);
+    a2.enrgCours(jour, 200.0f);
+
+    ActionComposee ac = new ActionComposee("AC");
+    ac.ajouterComposant(a1, 0.5f);
+    ac.ajouterComposant(a2, 0.5f); // valeur = (100 * 0.5 + 200 * 0.5) = 150
+
+    portefeuille.acheterActionComposee(ac, 2, jour); // coût total = 2 * 150 = 300
+
+    assertEquals(200.0, portefeuille.getSolde(), 0.001);
+    assertEquals(2, portefeuille.getActions().size());
+    assertTrue(portefeuille.getActions().stream().allMatch(a -> a.equals(ac)));
+}
+@Test
+public void testUS7_2_actionComposeeNulle() {
+    Portefeuille portefeuille = new Portefeuille("TestUser");
+    portefeuille.setSolde(1000.0);
+    Jour jour = new Jour(2025, 161);
+
+    assertThrows(IllegalArgumentException.class, () -> {
+        portefeuille.acheterActionComposee(null, 1, jour);
+    });
+
+    assertEquals(0, portefeuille.getActions().size());
+    assertEquals(1000.0, portefeuille.getSolde(), 0.001);
+}
+@Test
+public void testUS7_3_quantiteInvalide() {
+    Portefeuille portefeuille = new Portefeuille("TestUser");
+    portefeuille.setSolde(1000.0);
+    Jour jour = new Jour(2025, 162);
+
+    ActionSimple a = new ActionSimple("A");
+    a.enrgCours(jour, 100.0f);
+
+    ActionComposee ac = new ActionComposee("AC");
+    ac.ajouterComposant(a, 1.0f); // valeur = 100
+
+    // Quantité = 0
+    assertThrows(IllegalArgumentException.class, () -> {
+        portefeuille.acheterActionComposee(ac, 0, jour);
+    });
+
+    // Quantité négative
+    assertThrows(IllegalArgumentException.class, () -> {
+        portefeuille.acheterActionComposee(ac, -2, jour);
+    });
+
+    assertEquals(0, portefeuille.getActions().size());
+    assertEquals(1000.0, portefeuille.getSolde(), 0.001);
+}
+@Test
+public void testUS7_4_actionComposeeSansCours() {
+    Portefeuille portefeuille = new Portefeuille("TestUser");
+    portefeuille.setSolde(1000.0);
+
+    ActionSimple a1 = new ActionSimple("A1");
+    ActionSimple a2 = new ActionSimple("A2");
+    Jour jour = new Jour(2025, 163);
+
+    // Ne pas enregistrer de cours pour les actions
+
+    ActionComposee ac = new ActionComposee("AC");
+    ac.ajouterComposant(a1, 0.6f);
+    ac.ajouterComposant(a2, 0.4f);
+
+    // Act & Assert
+    assertThrows(IllegalArgumentException.class, () -> {
+        portefeuille.acheterActionComposee(ac, 1, jour);
+    });
+
+    // Vérifications
+    assertEquals(0, portefeuille.getActions().size());
+    assertEquals(1000.0, portefeuille.getSolde(), 0.001);
+}
+@Test
+public void testUS7_5_soldeInsuffisantPourActionComposee() {
+    Portefeuille portefeuille = new Portefeuille("TestUser");
+    portefeuille.setSolde(50.0); // solde trop faible
+
+    ActionSimple a1 = new ActionSimple("A1");
+    ActionSimple a2 = new ActionSimple("A2");
+    Jour jour = new Jour(2025, 165);
+
+    // Enregistrer les cours
+    a1.enrgCours(jour, 100.0f); // cher
+    a2.enrgCours(jour, 100.0f); // cher aussi
+
+    ActionComposee ac = new ActionComposee("AC");
+    ac.ajouterComposant(a1, 0.5f); // 100 * 0.5 = 50
+    ac.ajouterComposant(a2, 0.5f); // 100 * 0.5 = 50
+    // valeur totale = 100.0
+
+    // On tente d’en acheter 1 → coût = 100.0 > solde = 50.0
+
+    assertThrows(IllegalStateException.class, () -> {
+        portefeuille.acheterActionComposee(ac, 1, jour);
+    });
+
+    // Vérifie que rien n’a été modifié
+    assertEquals(0, portefeuille.getActions().size());
+    assertEquals(50.0, portefeuille.getSolde(), 0.001);
+}
+
 }

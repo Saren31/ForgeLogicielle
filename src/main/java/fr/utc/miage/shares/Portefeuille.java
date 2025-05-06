@@ -167,5 +167,39 @@ public class Portefeuille {
           this.actions.add(action);
       }
   }
+
+    /**
+    * Permet d'acheter une ou plusieurs actions composées.
+    *
+    * @param actionComposee l'action composée achetée
+    * @param quantite       la quantité souhaitée
+    * @param jour           le jour de l'achat
+    *
+    * @throws IllegalArgumentException si l'action est null alors la quantité est invalide ou l'action n'a pas de valeur pour ce jour
+    * @throws IllegalStateException    si le solde est insuffisant
+    */
+    public void acheterActionComposee(ActionComposee actionComposee, int quantite, Jour jour) {
+        if (actionComposee == null || quantite <= 0) {
+            throw new IllegalArgumentException("Action invalide ou quantité invalide");
+        }
+
+        float prixUnitaire = actionComposee.valeur(jour);
+        if (prixUnitaire == 0.0f) {
+            throw new IllegalArgumentException("L'action composée n'a pas de prix pour ce jour");
+        }
+
+        double coutTotal = prixUnitaire * quantite;
+        if (coutTotal > solde) {
+            throw new IllegalStateException("Solde insuffisant pour l'achat");
+        }
+
+        // Débiter le solde
+        solde -= coutTotal;
+
+        // Ajouter les actions au portefeuille
+        for (int i = 0; i < quantite; i++) {
+            actions.add(actionComposee);
+        }
+    }
 }  
 
