@@ -19,6 +19,13 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+
+import java.util.LinkedList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 public class PortefeuilleTest {
@@ -50,12 +57,20 @@ public class PortefeuilleTest {
      void testAllGettersShouldWork(){
 
         final Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
-        final String result = portefeuille.getNom();
-
-        assertEquals(VALEUR_NOM1,result,
-         "Le nom du portefeuille doit correspondre a celui passé en parametre");
-        
+        final String resultNom = portefeuille.getNom();
+         final double resultSolde = portefeuille.getSolde();
+         final List<Action> resultActions = portefeuille.getActions();
+ 
+         assertAll("Getters",
+             () -> assertEquals(VALEUR_NOM1, resultNom,
+                 "Le nom du portefeuille doit correspondre a celui passé en parametre"),
+             () -> assertEquals(0.0, resultSolde,
+                 "Le solde du portefeuille doit etre initialise a 0.0"),
+             () -> assertEquals(new LinkedList<>(), resultActions,
+                 "La liste d'actions du portefeuille doit etre vide")
+         );
      }
+ 
      @Test
      void testAjouteUneActionDansLePortefeuilleAvecSuccès(){
 
@@ -80,6 +95,43 @@ public class PortefeuilleTest {
         assertEquals(0,nombreActionsRetirees,   
          "Le portefeuille doit etre vide apres le retrait de l'action");   
          
+     }
+
+     @Test
+     void testEqualsShouldWork(){
+
+        final Portefeuille portefeuille1 = new Portefeuille(VALEUR_NOM1);
+        final Portefeuille portefeuille2 = new Portefeuille(VALEUR_NOM1);
+        final Portefeuille portefeuille3 = new Portefeuille(VALEUR_NOM2);
+
+        assertAll("Equals",
+            () -> assertEquals(portefeuille1, portefeuille2,
+                "Deux portefeuilles avec le meme nom doivent etre egaux"),
+            () -> assertEquals(portefeuille1, portefeuille1,
+                "Un portefeuille doit etre egal a lui-meme")
+        );
+     }
+
+     @Test
+     void testEqualsShouldNotWork(){
+        final Portefeuille portefeuille1 = new Portefeuille(VALEUR_NOM1);
+        final Portefeuille portefeuille2 = new Portefeuille(VALEUR_NOM2);
+        final Integer portefeuille3 = 1;
+        final Portefeuille portefeuille4 = new Portefeuille(VALEUR_NOM1);
+
+        final ActionSimple action = new ActionSimple(VALEUR_NOM1);
+        portefeuille1.ajouterAction(action);
+
+        assertAll("Equals",
+            () -> assertNotEquals(portefeuille1, portefeuille2,
+                "Deux portefeuilles avec des noms differents ne doivent pas etre egaux"),
+            () -> assertNotEquals(portefeuille1, null, 
+                "Un portefeuille ne peut pas etre egal a un objet d'une classe differente"),
+            () -> assertNotEquals(portefeuille1, portefeuille3,
+                "Un portefeuille ne doit pas etre egal a un objet d'un autre type"),
+            () -> assertNotEquals(portefeuille1, portefeuille4,
+                "Deux portefeuilles avec le meme nom mais des actions differentes ne doivent pas etre egaux")
+        );
      }
 
 
