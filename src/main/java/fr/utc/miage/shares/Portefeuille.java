@@ -15,6 +15,7 @@
  */
 package fr.utc.miage.shares;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -30,7 +31,7 @@ public class Portefeuille {
     private final String nom;
 
     // attribut comportant la liste des actions
-    private final List<Action> actions;
+    private List<Action> actions;
 
     // attribut comportant le solde du portefeuille
     private double solde;
@@ -162,8 +163,7 @@ public void acheterAction(ActionSimple action, int quantite, Jour jour) {
           this.actions.add(action);
       }
   }
-}  
-
+  
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

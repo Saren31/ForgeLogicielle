@@ -200,7 +200,7 @@ public class PortefeuilleTest {
 
     @Test
 public void testUS6_3_actionNulle() {
-    Portefeuille portefeuille = new Portefeuille();
+    Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
     portefeuille.setSolde(1000.0);
     Jour jour = new Jour(2025, 126);
 
@@ -211,7 +211,7 @@ public void testUS6_3_actionNulle() {
 @Test
 public void testUS8_1_venteReussie() {
     // Arrange
-    Portefeuille portefeuille = new Portefeuille();
+    Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
     portefeuille.setSolde(0.0);
     ActionSimple action = new ActionSimple("ActionTest");
     Jour jour = new Jour(2025, 150);
@@ -232,7 +232,7 @@ public void testUS8_1_venteReussie() {
 @Test
 public void testUS8_2_quantiteExcessive() {
     // Arrange
-    Portefeuille portefeuille = new Portefeuille();
+    Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
     portefeuille.setSolde(0.0);
     ActionSimple action = new ActionSimple("ActionTest");
     Jour jour = new Jour(2025, 151);
@@ -252,7 +252,7 @@ public void testUS8_2_quantiteExcessive() {
 }
 @Test
 public void testUS8_3_actionNulleOuQuantiteInvalide() {
-    Portefeuille portefeuille = new Portefeuille();
+    Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
     portefeuille.setSolde(0.0);
     ActionSimple action = new ActionSimple("TestAction");
     Jour jour = new Jour(2025, 152);
@@ -275,7 +275,7 @@ public void testUS8_3_actionNulleOuQuantiteInvalide() {
 }
 @Test
 public void testUS8_4_actionSansCoursPourJour() {
-    Portefeuille portefeuille = new Portefeuille();
+    Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
     portefeuille.setSolde(0.0);
     ActionSimple action = new ActionSimple("TestAction");
     Jour jour = new Jour(2025, 153);
@@ -292,66 +292,57 @@ public void testUS8_4_actionSansCoursPourJour() {
     assertEquals(1, portefeuille.getActions().size());
     assertEquals(0.0, portefeuille.getSolde(), 0.001);
 }
-@Test
-public void testUS8_5_ventePartielleConserveLeReste() {
-    Portefeuille portefeuille = new Portefeuille();
-    portefeuille.setSolde(0.0);
-    ActionSimple action = new ActionSimple("TestAction");
-    Jour jour = new Jour(2025, 154);
-    action.enrgCours(jour, 100.0f);
+    @Test
+    public void testUS8_5_ventePartielleConserveLeReste() {
+        Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
+        portefeuille.setSolde(0.0);
+        ActionSimple action = new ActionSimple("TestAction");
+        Jour jour = new Jour(2025, 154);
+        action.enrgCours(jour, 100.0f);
 
-    // Ajouter 5 actions
-    for (int i = 0; i < 5; i++) {
-        portefeuille.ajouterAction(action);
+        // Ajouter 5 actions
+        for (int i = 0; i < 5; i++) {
+            portefeuille.ajouterAction(action);
+        }
+
+        // Vendre 2 actions
+        portefeuille.vendreAction(action, 2, jour);
+
+        // Assert
+        assertEquals(200.0, portefeuille.getSolde(), 0.001); 
+        assertEquals(3, portefeuille.getActions().size());
+        assertTrue(portefeuille.getActions().stream().allMatch(a -> a.equals(action)));
     }
 
-    // Vendre 2 actions
-    portefeuille.vendreAction(action, 2, jour);
+    @Test
+    public void testUS8_6_venteNeRetireQueLesActionsIdentiques() {
+        Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
+        portefeuille.setSolde(0.0);
 
-    // Assert
-    assertEquals(200.0, portefeuille.getSolde(), 0.001); 
-    assertEquals(3, portefeuille.getActions().size());
-    assertTrue(portefeuille.getActions().stream().allMatch(a -> a.equals(action)));
-}
-@Test
-public void testUS8_6_venteNeRetireQueLesActionsIdentiques() {
-    Portefeuille portefeuille = new Portefeuille();
-    portefeuille.setSolde(0.0);
+        ActionSimple action1 = new ActionSimple("ActionA"); // celle qu'on vend
+        ActionSimple action2 = new ActionSimple("ActionB"); // doit rester
+        Jour jour = new Jour(2025, 155);
 
-    ActionSimple action1 = new ActionSimple("ActionA"); // celle qu'on vend
-    ActionSimple action2 = new ActionSimple("ActionB"); // doit rester
-    Jour jour = new Jour(2025, 155);
+        action1.enrgCours(jour, 100.0f);
+        action2.enrgCours(jour, 200.0f);
 
-    action1.enrgCours(jour, 100.0f);
-    action2.enrgCours(jour, 200.0f);
+        // Ajouter 2 × action1 et 1 × action2
+        portefeuille.ajouterAction(action1);
+        portefeuille.ajouterAction(action1);
+        portefeuille.ajouterAction(action2);
 
-    // Ajouter 2 × action1 et 1 × action2
-    portefeuille.ajouterAction(action1);
-    portefeuille.ajouterAction(action1);
-    portefeuille.ajouterAction(action2);
+        // Vendre 1 × action1
+        portefeuille.vendreAction(action1, 1, jour);
 
-    // Vendre 1 × action1
-    portefeuille.vendreAction(action1, 1, jour);
+        // Assert
+        assertEquals(100.0, portefeuille.getSolde(), 0.001);
+        assertEquals(2, portefeuille.getActions().size());
+        
+        // Vérifie qu’il reste 1 × action1 et 1 × action2
+        long remainingAction1 = portefeuille.getActions().stream().filter(a -> a.equals(action1)).count();
+        long remainingAction2 = portefeuille.getActions().stream().filter(a -> a.equals(action2)).count();
 
-    // Assert
-    assertEquals(100.0, portefeuille.getSolde(), 0.001);
-    assertEquals(2, portefeuille.getActions().size());
-    
-    // Vérifie qu’il reste 1 × action1 et 1 × action2
-    long remainingAction1 = portefeuille.getActions().stream().filter(a -> a.equals(action1)).count();
-    long remainingAction2 = portefeuille.getActions().stream().filter(a -> a.equals(action2)).count();
-
-    assertEquals(1, remainingAction1);
-    assertEquals(1, remainingAction2);
-}
-
-    void testUS6_3_actionNulle() {
-      Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
-      portefeuille.setSolde(1000.0);
-      Jour jour = new Jour(2025, 126);
-
-      assertThrows(IllegalArgumentException.class, () -> {
-          portefeuille.acheterAction(null, 1, jour);
-      });
+        assertEquals(1, remainingAction1);
+        assertEquals(1, remainingAction2);
     }
 }
