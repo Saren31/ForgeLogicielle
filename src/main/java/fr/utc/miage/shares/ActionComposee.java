@@ -48,7 +48,9 @@
         if (proportion <= 0.0f || proportion > 1.0f) {
             throw new IllegalArgumentException("proportion doit être entre 0 et 1");
         }
-        if (composants.values().stream().mapToDouble(Float::doubleValue).sum() + proportion > 1) {
+        if (composants.values().stream().mapToDouble(Float::doubleValue).sum() + proportion > 1 + 1e-6) {
+            double valeur = composants.values().stream().mapToDouble(Float::doubleValue).sum() + proportion;
+            System.out.println(valeur);
             throw new IllegalArgumentException("La somme des proportions doit etre egale a 1 ou inferieure a 1");
         }
         composants.put(action, proportion);
