@@ -1,5 +1,6 @@
 /*
- * Copyright 2025 Yan.Liang.
+ * Copyright 2025 Mengyi YANG & Yan.Liang
+
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,33 +19,49 @@ package fr.utc.miage.shares;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.HashMap;
 
 public class ActionComposee extends Action {
 
-    private final Map<ActionSimple, Float> composition;
+    private final Map<ActionSimple, Float> composants;
 
-    public ActionComposee(String libelle, Map<ActionSimple, Float> composition) {
-        super(libelle); 
-        this.composition = composition;
+    public ActionComposee(String libelle) {
+        super(libelle);
+        if (libelle == null || libelle.isBlank()) {
+            throw new IllegalArgumentException("libelle invalide");
+        }
+        this.composants = new HashMap<>();
     }
 
-    public Map<ActionSimple, Float> getComposition() {
-        return composition;
+    public void ajouterComposant(ActionSimple action, float proportion) {
+        if (action == null) {
+            throw new IllegalArgumentException("action composant ne peut pas être null");
+        }
+        if (proportion <= 0.0f || proportion > 1.0f) {
+            throw new IllegalArgumentException("proportion doit être entre 0 et 1");
+        }
+        composants.put(action, proportion);
     }
 
     @Override
     public float valeur(Jour j) {
-        float total = 0f;
-        for (Map.Entry<ActionSimple, Float> entry : composition.entrySet()) {
-            total += entry.getKey().valeur(j) * entry.getValue();
+        float somme = 0.0f;
+        for (Map.Entry<ActionSimple, Float> entry : composants.entrySet()) {
+            Action action = entry.getKey();
+            float proportion = entry.getValue();
+            somme += proportion * action.valeur(j);
         }
-        return total;
+        return somme;
+    }
+
+    public Map<ActionSimple, Float> getComposants() {
+        return composants;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Action composée : " + getLibelle() + "\nComposition :\n");
-        for (Map.Entry<ActionSimple, Float> entry : composition.entrySet()) {
+        for (Map.Entry<ActionSimple, Float> entry : composants.entrySet()) {
             sb.append("- ").append(entry.getKey().getLibelle())
               .append(" : ").append(entry.getValue() * 100).append("%\n");
         }
@@ -57,11 +74,11 @@ public class ActionComposee extends Action {
         if (!(o instanceof ActionComposee)) return false;
         if (!super.equals(o)) return false;
         ActionComposee that = (ActionComposee) o;
-        return composition.equals(that.composition);
+        return composants.equals(that.composants);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), composition);
+        return Objects.hash(super.hashCode(), composants);
     }
 }
