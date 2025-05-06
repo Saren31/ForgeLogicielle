@@ -7,17 +7,21 @@ class ActionComposeeTest {
 
     private static class FakeAction extends Action {
         private final float valeur;
-
+    
         public FakeAction(String libelle, float valeur) {
             super(libelle);
+            if (libelle == null || libelle.isBlank()) {
+                throw new IllegalArgumentException("libelle invalide");
+            }
             this.valeur = valeur;
         }
-
+    
         @Override
         public float valeur(Jour j) {
             return valeur;
         }
     }
+    
 
     @Test
     void testCreationEtValeurActionComposee() {

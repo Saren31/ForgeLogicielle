@@ -2,6 +2,7 @@ package fr.utc.miage.shares;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Portefeuille {
     
@@ -52,7 +53,7 @@ public class Portefeuille {
         return sb.toString();
     }
 
-    public int equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Portefeuille that = (Portefeuille) o;
