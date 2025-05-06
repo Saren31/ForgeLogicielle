@@ -16,48 +16,43 @@
 
 package fr.utc.miage.shares;
 
+import java.util.Map;
+import java.util.HashMap;
+
 public class ActionComposee extends Action {
 
-    public static class Composant {
-        private final Action action;
-        private final float proportion; 
-
-        public Composant(Action action, float proportion) {
-            if (proportion < 0 || proportion > 1) {
-                throw new IllegalArgumentException("La proportion doit être entre 0 et 1.");
-            }
-            this.action = action;
-            this.proportion = proportion;
-        }
-
-        public Action getAction() {
-            return action;
-        }
-
-        public float getProportion() {
-            return proportion;
-        }
-    }
-
-    private final List<Composant> composants = new ArrayList<>();
+    private final Map<Action, Float> composants;
 
     public ActionComposee(String libelle) {
         super(libelle);
+        if (libelle == null || libelle.isBlank()) {
+            throw new IllegalArgumentException("libelle invalide");
+        }
+        this.composants = new HashMap<>();
     }
-
 
     public void ajouterComposant(Action action, float proportion) {
-        composants.add(new Composant(action, proportion));
+        if (action == null) {
+            throw new IllegalArgumentException("action composant ne peut pas être null");
+        }
+        if (proportion <= 0.0f || proportion > 1.0f) {
+            throw new IllegalArgumentException("proportion doit être entre 0 et 1");
+        }
+        composants.put(action, proportion);
     }
-
 
     @Override
     public float valeur(Jour j) {
-        float total = 0;
-        for (Composant c : composants) {
-            total += c.getProportion() * c.getAction().valeur(j);
+        float somme = 0.0f;
+        for (Map.Entry<Action, Float> entry : composants.entrySet()) {
+            Action action = entry.getKey();
+            float proportion = entry.getValue();
+            somme += proportion * action.valeur(j);
         }
-        return total;
+        return somme;
     }
 
+    public Map<Action, Float> getComposants() {
+        return composants;
+    }
 }
