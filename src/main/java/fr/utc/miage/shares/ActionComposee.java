@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Yan.Liang.
+ * Copyright 2025 Mengyi YANG et Yan Liang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,54 +14,76 @@
  * limitations under the License.
  */
 
-package fr.utc.miage.shares;
+ package fr.utc.miage.shares;
 
-import java.util.Map;
-import java.util.Objects;
-
-public class ActionComposee extends Action {
-
-    private final Map<ActionSimple, Float> composition;
-
-    public ActionComposee(String libelle, Map<ActionSimple, Float> composition) {
-        super(libelle); 
-        this.composition = composition;
-    }
-
-    public Map<ActionSimple, Float> getComposition() {
-        return composition;
-    }
-
-    @Override
-    public float valeur(Jour j) {
-        float total = 0f;
-        for (Map.Entry<ActionSimple, Float> entry : composition.entrySet()) {
-            total += entry.getKey().valeur(j) * entry.getValue();
+ import java.util.Map;
+ import java.util.HashMap;
+ 
+ public class ActionComposee extends Action {
+ 
+     private final Map<Action, Float> composants;
+ 
+     @Deprecated
+     public ActionComposee(String libelle) {
+        super(libelle);
+        if (libelle == null || libelle.isBlank()) {
+            throw new IllegalArgumentException("libelle invalide");
         }
-        return total;
+        this.composants = new HashMap<>();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("Action composée : " + getLibelle() + "\nComposition :\n");
-        for (Map.Entry<ActionSimple, Float> entry : composition.entrySet()) {
-            sb.append("- ").append(entry.getKey().getLibelle())
-              .append(" : ").append(entry.getValue() * 100).append("%\n");
+    public ActionComposee(String libelle, Map<Action, Float> composants) {
+        super(libelle);
+        if (libelle == null || libelle.isBlank()) {
+            throw new IllegalArgumentException("libelle invalide");
         }
-        return sb.toString();
+        this.composants = new HashMap<>();
+        this.ajouterComposants(composants);
     }
+ 
+     public void ajouterComposant(Action action, float proportion) {
+        if (action == null) {
+            throw new IllegalArgumentException("action composant ne peut pas être null");
+        }
+        if (proportion <= 0.0f || proportion > 1.0f) {
+            throw new IllegalArgumentException("proportion doit être entre 0 et 1");
+        }
+        if (composants.values().stream().mapToDouble(Float::doubleValue).sum() + proportion > 1 + 1e-6) {
+            double valeur = composants.values().stream().mapToDouble(Float::doubleValue).sum() + proportion;
+            System.out.println(valeur);
+            throw new IllegalArgumentException("La somme des proportions doit etre egale a 1 ou inferieure a 1");
+        }
+        composants.put(action, proportion);
+     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ActionComposee)) return false;
-        if (!super.equals(o)) return false;
-        ActionComposee that = (ActionComposee) o;
-        return composition.equals(that.composition);
-    }
+     public void ajouterComposants(Map<Action, Float> composants) {
+        if (composants == null) {
+            throw new IllegalArgumentException("composants ne peut pas être null");
+        }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), composition);
-    }
-}
+        if (composants.values().stream().mapToDouble(Float::doubleValue).sum() != 1) {
+            throw new IllegalArgumentException("La somme des proportions doit etre egale a 1");
+        }
+        
+         for (Map.Entry<Action, Float> entry : composants.entrySet()) {
+             Action action = entry.getKey();
+             float proportion = entry.getValue();
+             ajouterComposant(action, proportion);
+         }
+     }
+ 
+     @Override
+     public float valeur(Jour j) {
+         float somme = 0.0f;
+         for (Map.Entry<Action, Float> entry : composants.entrySet()) {
+             Action action = entry.getKey();
+             float proportion = entry.getValue();
+             somme += proportion * action.valeur(j);
+         }
+         return somme;
+     }
+ 
+     public Map<Action, Float> getComposants() {
+         return composants;
+     }
+ }
