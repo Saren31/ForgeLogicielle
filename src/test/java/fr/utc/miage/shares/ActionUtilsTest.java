@@ -32,7 +32,7 @@ class ActionUtilsTest {
         action.enrgCours(jour2, 12.3f);
 
         String details = ActionUtils.afficherDetails(action);
-        System.out.println(details);  // ️ 用于调试
+        System.out.println(details); 
 
         assertTrue(details.contains("TestSimple"));
         assertTrue(details.contains("Type : Action simple"));
@@ -51,7 +51,7 @@ class ActionUtilsTest {
         ac.ajouterComposant(a2, 0.6f);
 
         String details = ActionUtils.afficherDetails(ac);
-        System.out.println(details);  // ️ 用于调试
+        System.out.println(details); 
 
         assertTrue(details.contains("Composée"));
         assertTrue(details.contains("Type : Action composée"));
