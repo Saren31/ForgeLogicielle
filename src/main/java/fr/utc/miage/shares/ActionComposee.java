@@ -18,11 +18,12 @@
 package fr.utc.miage.shares;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.HashMap;
 
 public class ActionComposee extends Action {
 
-    private final Map<Action, Float> composants;
+    private final Map<ActionSimple, Float> composants;
 
     public ActionComposee(String libelle) {
         super(libelle);
@@ -32,7 +33,7 @@ public class ActionComposee extends Action {
         this.composants = new HashMap<>();
     }
 
-    public void ajouterComposant(Action action, float proportion) {
+    public void ajouterComposant(ActionSimple action, float proportion) {
         if (action == null) {
             throw new IllegalArgumentException("action composant ne peut pas être null");
         }
@@ -45,7 +46,7 @@ public class ActionComposee extends Action {
     @Override
     public float valeur(Jour j) {
         float somme = 0.0f;
-        for (Map.Entry<Action, Float> entry : composants.entrySet()) {
+        for (Map.Entry<ActionSimple, Float> entry : composants.entrySet()) {
             Action action = entry.getKey();
             float proportion = entry.getValue();
             somme += proportion * action.valeur(j);
@@ -53,14 +54,14 @@ public class ActionComposee extends Action {
         return somme;
     }
 
-    public Map<Action, Float> getComposants() {
+    public Map<ActionSimple, Float> getComposants() {
         return composants;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Action composée : " + getLibelle() + "\nComposition :\n");
-        for (Map.Entry<ActionSimple, Float> entry : composition.entrySet()) {
+        for (Map.Entry<ActionSimple, Float> entry : composants.entrySet()) {
             sb.append("- ").append(entry.getKey().getLibelle())
               .append(" : ").append(entry.getValue() * 100).append("%\n");
         }
@@ -73,11 +74,11 @@ public class ActionComposee extends Action {
         if (!(o instanceof ActionComposee)) return false;
         if (!super.equals(o)) return false;
         ActionComposee that = (ActionComposee) o;
-        return composition.equals(that.composition);
+        return composants.equals(that.composants);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), composition);
+        return Objects.hash(super.hashCode(), composants);
     }
 }
