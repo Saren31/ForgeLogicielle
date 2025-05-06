@@ -5,10 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ActionComposeeTest {
 
-    // Classe factice pour simuler des actions simples
     private static class FakeAction extends Action {
         private final float valeur;
-    
     
         public FakeAction(String libelle, float valeur) {
             super(libelle);
@@ -17,7 +15,6 @@ class ActionComposeeTest {
             }
             this.valeur = valeur;
         }
-    
     
         @Override
         public float valeur(Jour j) {
@@ -36,21 +33,26 @@ class ActionComposeeTest {
         ac.ajouterComposant(a2, 0.4f);
 
         assertEquals("CompoA1A2", ac.getLibelle());
-        assertEquals(80f, ac.valeur(null), 0.0001f);
+
+        float expected = 80f;
+        float actual = ac.valeur(null);
+        assertEquals(expected, actual, 0.0001f);
     }
+
 
     @Test
     void testEchecCreationSiLibelleInvalide() {
-        assertThrows(IllegalArgumentException.class, () -> new FakeAction(null, 100f));
-        assertThrows(IllegalArgumentException.class, () -> new FakeAction("", 100f));
-        assertThrows(IllegalArgumentException.class, () -> new FakeAction("   ", 100f));
-        assertThrows(IllegalArgumentException.class, () -> new ActionComposee("   "));
-    }
+        Exception ex1 = assertThrows(IllegalArgumentException.class, () -> {
+            new FakeAction(null, 100f);
+        });
 
-    @Test
-    void testAjouterComposantAvecPoidsInvalide() {
-        Action a = new FakeAction("A", 100f);
-        ActionComposee ac = new ActionComposee("Test");
+        Exception ex2 = assertThrows(IllegalArgumentException.class, () -> {
+            new FakeAction("", 100f);
+        });
+
+        Exception ex3 = assertThrows(IllegalArgumentException.class, () -> {
+            new FakeAction("   ", 100f);
+        });
 
         Exception ex4 = assertThrows(IllegalArgumentException.class, () -> {
             new ActionComposee("  ");
