@@ -15,7 +15,7 @@ class ActionComposeeTest {
             }
             this.valeur = valeur;
         }
-    
+        
         @Override
         public float valeur(Jour j) {
             return valeur;
