@@ -84,4 +84,16 @@ class ActionComposeeTest {
 
         assertEquals(25f, ac.valeur(null), 0.0001f);
     }
+
+    @Test
+    void testGetComposants() {
+    Action a = new FakeAction("A", 100f);
+    ActionComposee ac = new ActionComposee("Test");
+    ac.ajouterComposant(a, 0.7f);
+
+    Map<Action, Float> composants = ac.getComposants();
+    assertEquals(1, composants.size());
+    assertEquals(0.7f, composants.get(a));
+}
+
 }
