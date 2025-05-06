@@ -135,7 +135,7 @@ public class Portefeuille {
  * @param quantite la quantite d'action à acheter
  * @param jour le jour auquel on achete l'action et qui determine donc la valeur
  * 
- * @throws IllegalArgumentException si action null, si quantite <= 0,
+ * @throws IllegalArgumentException si action null, si quantite inferieur ou egal a 0,
  *                                  ou si l'action n'a pas de prix pour ce jour
  * @throws IllegalStateException    si le solde est insuffisant pour l'achat
  */    
@@ -163,7 +163,7 @@ public void acheterAction(ActionSimple action, int quantite, Jour jour) {
           this.actions.add(action);
       }
   }
-  
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -195,7 +195,7 @@ public void acheterAction(ActionSimple action, int quantite, Jour jour) {
  * @param quantite la quantite d'action à vendre
  * @param jour le jour auquel on vend l'action et qui determine donc la valeur
  *
- * @throws IllegalArgumentException si action null, si quantite <= 0,
+ * @throws IllegalArgumentException si action null, si quantite inferieur ou egal    0,
  *                                  ou si l'action n'a pas de prix pour ce jour
  * @throws IllegalStateException    si le solde est insuffisant pour la vente
  * 
