@@ -14,53 +14,50 @@
  * limitations under the License.
  */
 
-package fr.utc.miage;
+ package fr.utc.miage.shares;
 
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.Test;
-
-import fr.utc.miage.shares.ActionComposee;
-import fr.utc.miage.shares.ActionSimple;
-import fr.utc.miage.shares.Portefeuille;
-
-public class ActionComposeeTestYan {
-
-    @Test
-    public void testCreationActionComposee() {
-        ActionSimple apple = new ActionSimple("Apple");
-        ActionSimple google = new ActionSimple("Google");
-
-        Map<ActionSimple, Float> composition = Map.of(
-            apple, 0.6f,
-            google, 0.4f
-        );
-
-        ActionComposeeYan ac = new ActionComposeeYan("TechMix", composition);
-
-        assertEquals("TechMix", ac.getLibelle());
-        assertEquals(2, ac.getComposition().size());
-        assertEquals(0.6f, ac.getComposition().get(apple));
-    }
-
-    @Test
-    public void testAjoutDansPortefeuille() {
-        ActionSimple apple = new ActionSimple("Apple");
-        ActionSimple google = new ActionSimple("Google");
-
-        Map<ActionSimple, Float> composition = Map.of(
-            apple, 0.5f,
-            google, 0.5f
-        );
-
-        ActionComposeeYan ac = new ActionComposeeYan("BigTech", composition);
-
-        Portefeuille portefeuille = new Portefeuille();
-        portefeuille.ajouterAction(ac);
-
-        assertTrue(portefeuille.getActions().contains(ac));
-        assertEquals(1, portefeuille.getActions().size());
-    }
-}
+ import java.util.Map;
+ 
+ import static org.junit.jupiter.api.Assertions.assertEquals;
+ import static org.junit.jupiter.api.Assertions.assertTrue;
+ import org.junit.jupiter.api.Test;
+ 
+ public class ActionComposeeTestYan {
+ 
+     @Test
+     public void testCreationActionComposee() {
+         ActionSimple apple = new ActionSimple("Apple");
+         ActionSimple google = new ActionSimple("Google");
+ 
+         Map<ActionSimple, Float> composition = Map.of(
+             apple, 0.6f,
+             google, 0.4f
+         );
+ 
+         ActionComposeeYan ac = new ActionComposeeYan("TechMix", composition);
+ 
+         assertEquals("TechMix", ac.getLibelle());
+         assertEquals(2, ac.getComposition().size());
+         assertEquals(0.6f, ac.getComposition().get(apple));
+     }
+ 
+     @Test
+     public void testAjoutDansPortefeuille() {
+         ActionSimple apple = new ActionSimple("Apple");
+         ActionSimple google = new ActionSimple("Google");
+ 
+         Map<ActionSimple, Float> composition = Map.of(
+             apple, 0.5f,
+             google, 0.5f
+         );
+ 
+         ActionComposeeYan ac = new ActionComposeeYan("BigTech", composition);
+ 
+         Portefeuille portefeuille = new Portefeuille();
+         portefeuille.ajouterAction(ac);
+ 
+         assertTrue(portefeuille.getActions().contains(ac));
+         assertEquals(1, portefeuille.getActions().size());
+     }
+ }
+ 
