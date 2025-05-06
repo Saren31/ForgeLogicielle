@@ -53,4 +53,13 @@ public class ActionSimple extends Action {
             return DEFAULT_ACTION_VALUE;
         }
     }
+
+    public Map<Jour, Float> getCours() {
+        return this.mapCours;
+    }
+
+    public Map<Jour, Float> getMapCours() {
+        return this.mapCours;
+    }
+    
 }

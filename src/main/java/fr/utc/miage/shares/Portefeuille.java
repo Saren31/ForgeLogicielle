@@ -17,7 +17,6 @@ package fr.utc.miage.shares;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This class represents the behavior of a Portefeuille
