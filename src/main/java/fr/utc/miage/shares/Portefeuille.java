@@ -142,18 +142,6 @@ public class Portefeuille {
             return false;
         return true;
     }
-
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Portefeuille that = (Portefeuille) o;
-        return Double.compare(that.solde, solde) == 0 && Objects.equals(actions, that.actions);
-    }
-    
-    @Override
-    public int hashCode() {
-        return Objects.hash(actions, solde);
-    }
     
     public void acheterAction(ActionSimple action, int quantite, Jour jour) {
       if (action == null || quantite <= 0) {

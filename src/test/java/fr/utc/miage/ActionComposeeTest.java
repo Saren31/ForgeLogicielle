@@ -57,7 +57,7 @@ public class ActionComposeeTest {
 
         ActionComposee ac = new ActionComposee("BigTech", composition);
 
-        Portefeuille portefeuille = new Portefeuille();
+        Portefeuille portefeuille = new Portefeuille("Test");
         portefeuille.ajouterAction(ac);
 
         assertTrue(portefeuille.getActions().contains(ac));

@@ -19,8 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 
 import java.util.LinkedList;
@@ -135,9 +136,9 @@ public class PortefeuilleTest {
      }
 
     @Test
-    public void testUS6_1_achatReussi() {
+    void testUS6_1_achatReussi() {
         // Arrange
-        Portefeuille portefeuille = new Portefeuille();
+        Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
         portefeuille.setSolde(1000.0);
         ActionSimple action = new ActionSimple("TestAction");
         Jour jour = new Jour(2025, 126);
@@ -153,8 +154,8 @@ public class PortefeuilleTest {
     }
 
     @Test
-    public void testUS6_2_quantiteInvalide() {
-        Portefeuille portefeuille = new Portefeuille();
+    void testUS6_2_quantiteInvalide() {
+        Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
         portefeuille.setSolde(1000.0);
         ActionSimple action = new ActionSimple("TestAction");
         Jour jour = new Jour(2025, 126);
@@ -172,8 +173,8 @@ public class PortefeuilleTest {
     }
 
     @Test
-    public void testUS6_2_soldeInsuffisant() {
-        Portefeuille portefeuille = new Portefeuille();
+    void testUS6_2_soldeInsuffisant() {
+        Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
         portefeuille.setSolde(20.0);
         ActionSimple action = new ActionSimple("ActionChère");
         Jour jour = new Jour(2025, 126);
@@ -185,8 +186,8 @@ public class PortefeuilleTest {
     }
 
     @Test
-    public void testUS6_2_actionSansValeurPourLeJour() {
-        Portefeuille portefeuille = new Portefeuille();
+    void testUS6_2_actionSansValeurPourLeJour() {
+        Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
         portefeuille.setSolde(1000.0);
         ActionSimple action = new ActionSimple("ActionSansCours");
         Jour jour = new Jour(2025, 126);
@@ -198,8 +199,8 @@ public class PortefeuilleTest {
     }
 
     @Test
-    public void testUS6_3_actionNulle() {
-      Portefeuille portefeuille = new Portefeuille();
+    void testUS6_3_actionNulle() {
+      Portefeuille portefeuille = new Portefeuille(VALEUR_NOM1);
       portefeuille.setSolde(1000.0);
       Jour jour = new Jour(2025, 126);
 
