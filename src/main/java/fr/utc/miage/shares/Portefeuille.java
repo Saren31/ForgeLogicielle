@@ -143,11 +143,11 @@ public void vendreAction(ActionSimple action, int quantite, Jour jour) {
     }
 
     //retirer les actions
-    int supprimées = 0;
+    int supprimees = 0;
     List<Action> nouvellesActions = new ArrayList<>();
     for (Action a : actions) {
-        if (a.equals(action) && supprimées < quantite) {
-            supprimées++;
+        if (a.equals(action) && supprimees < quantite) {
+            supprimees++;
         } else {
             nouvellesActions.add(a);
         }
@@ -157,6 +157,7 @@ public void vendreAction(ActionSimple action, int quantite, Jour jour) {
     //créditer le solde
     solde += prixAction * quantite;
 }
+
 }
 
   
