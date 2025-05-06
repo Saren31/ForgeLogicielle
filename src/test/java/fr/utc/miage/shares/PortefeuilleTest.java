@@ -208,5 +208,4 @@ public class PortefeuilleTest {
           portefeuille.acheterAction(null, 1, jour);
       });
     }
-
 }

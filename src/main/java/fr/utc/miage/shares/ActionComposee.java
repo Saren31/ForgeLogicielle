@@ -1,5 +1,6 @@
 /*
- * Copyright 2025 Mengyi YANG.
+ * Copyright 2025 Mengyi YANG & Yan.Liang
+
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,5 +55,29 @@ public class ActionComposee extends Action {
 
     public Map<Action, Float> getComposants() {
         return composants;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Action composée : " + getLibelle() + "\nComposition :\n");
+        for (Map.Entry<ActionSimple, Float> entry : composition.entrySet()) {
+            sb.append("- ").append(entry.getKey().getLibelle())
+              .append(" : ").append(entry.getValue() * 100).append("%\n");
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ActionComposee)) return false;
+        if (!super.equals(o)) return false;
+        ActionComposee that = (ActionComposee) o;
+        return composition.equals(that.composition);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), composition);
     }
 }
