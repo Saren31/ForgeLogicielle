@@ -167,5 +167,53 @@ public class Portefeuille {
           this.actions.add(action);
       }
   }
+  /**
+ * Permet de vendre une ou plusieurs actions composées.
+ *
+ * @param actionComposee l'action composée à vendre
+ * @param quantite       la quantité à vendre
+ * @param jour           le jour de la vente
+ *
+ * @throws IllegalArgumentException si l'action est nulle alors la quantité est invalide ou l'action n'a pas de valeur pour ce jour
+ * @throws IllegalStateException    si le portefeuille ne contient pas assez de cette action composée
+ */
+public void vendreActionComposee(ActionComposee actionComposee, int quantite, Jour jour) {
+    if (actionComposee == null || quantite <= 0) {
+        throw new IllegalArgumentException("Action invalide ou quantité invalide");
+    }
+
+    float prixUnitaire = actionComposee.valeur(jour);
+    if (prixUnitaire == 0.0f) {
+        throw new IllegalArgumentException("L'action composée n'a pas de prix pour ce jour");
+    }
+
+    // Compter combien d'actions identiques sont présentes
+    int count = 0;
+    for (Action a : actions) {
+        if (a.equals(actionComposee)) {
+            count++;
+        }
+    }
+
+    if (count < quantite) {
+        throw new IllegalStateException("Pas assez d'actions composées à vendre");
+    }
+
+    // Supprimer les bonnes actions
+    int supprimees = 0;
+    List<Action> nouvelles = new LinkedList<>();
+    for (Action a : actions) {
+        if (a.equals(actionComposee) && supprimees < quantite) {
+            supprimees++;
+        } else {
+            nouvelles.add(a);
+        }
+    }
+    this.actions.clear();
+    this.actions.addAll(nouvelles);
+
+    // Créditer le solde
+    solde += prixUnitaire * quantite;
+}
 }  
 
